@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 """
 Using only a physics understanding of the system when calculating k
@@ -48,7 +47,7 @@ def spring_mass_system1(t, m, c, k, F, x0, xdot0, dt):
         # print(xddot)
         y[i] = [xddot, xdot, x]
     return y    
-
+#%%
 def main():
     #%%
     # load dataset
@@ -66,7 +65,7 @@ def main():
     m = 1
     c = 0.2
     k_bounds = [500, 1500]
-    k_pred_tot = np.zeros(k.shape)
+    data_pred_tot = np.zeros((k.shape[0], 2, k.shape[1]))
     
     for test in range(x.shape[0]):
         
@@ -80,7 +79,8 @@ def main():
         v0_batch = v[test, 0]
         
         n_batches = a_batches.shape[0]
-        k_pred = np.zeros(a_test.size)
+        # contains [k, a]
+        data_pred = np.zeros((2, a_test.size))
         for j in range(n_batches):
             
             a_batch = a_batches[j]
@@ -96,27 +96,21 @@ def main():
             except(RuntimeError): # If optimal parameter is not found and error is thrown
                 k_param = k_bounds[0]
             
-            k_pred[N*j:N*(j+1)] = k_param
-            
-            a_reconstructed = f(t_batch, k_param)
-            
             reconstructed_data = f1(t_batch, k_param)
             a_r = reconstructed_data[:,0]
             v_r = reconstructed_data[:,1]
             x_r = reconstructed_data[:,2]
             
+            data_pred[0, N*j:N*(j+1)] = k_param
+            data_pred[1, N*j:N*(j+1)] = a_r
+            
             x0_batch = x_r[-1]
             v0_batch = v_r[-1]
         
-        plt.figure()
-        plt.plot(t, k_pred, label='pred')
-        plt.plot(t, k[test], label='true')
-        plt.legend()
-        plt.tight_layout()
         
-        k_pred_tot[test] = k_pred
+        data_pred_tot[test] = data_pred
         print('finished test #%d'%(test+1))
-    np.save('./model_predictions/pure_physics/k_pred.npy', k_pred_tot)
+    np.save('./model_predictions/pure_physics/k_pred.npy', data_pred_tot)
     #%%
 
 if __name__ == '__main__':

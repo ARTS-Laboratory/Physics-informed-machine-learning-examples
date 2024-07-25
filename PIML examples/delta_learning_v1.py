@@ -1,7 +1,6 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-import matplotlib.pyplot as plt
 from numpy.lib.stride_tricks import sliding_window_view
 from tensorflow.keras.layers import Dense, Input, Add
 """
@@ -53,7 +52,7 @@ class DatasetGenerator(keras.utils.Sequence):
     def on_epoch_end(self):
         if(self.shuffle):
             np.random.shuffle(self.indices)
-
+#%%
 def main():
     #%%
     # Step 1. This training procedure is basically the same as pure_nn.
@@ -87,7 +86,7 @@ def main():
     # training parameters
     train_len = 50
     batch_size = 32
-    epochs = 1
+    epochs = 20
     
     training_generator = DatasetGenerator(X_train_nf, Y_train_nf, train_len=train_len, batch_size=batch_size)
     test_generator = DatasetGenerator(X_test_nf, Y_test_nf, train_len=train_len, batch_size=batch_size)
@@ -119,7 +118,7 @@ def main():
     
     # Step 2
     # load data
-    with_friction_data = np.load('./data/v4/no_friction.npy')
+    with_friction_data = np.load('./data/v4/with_friction.npy')
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     with_friction_data = with_friction_data[:,:-1:20,:]
     
@@ -148,7 +147,7 @@ def main():
     # training parameters
     train_len = 50
     batch_size = 32
-    epochs = 1
+    epochs = 20
     
     training_generator = DatasetGenerator(X_train_wf, Y_train_wf, train_len=train_len, batch_size=batch_size)
     test_generator = DatasetGenerator(X_test_wf, Y_test_wf, train_len=train_len, batch_size=batch_size)
@@ -222,8 +221,8 @@ def main():
         k_pred = combined_model.predict(sliding_window_view(X_test_wf[i], [train_len]))
         k_pred = k_pred*k_std + k_m
         k_wf_combined_model[i] = k_pred.flatten()
-    np.save('./model_predictions/delta_learning/no_friction_model_1.npy', k_wf_model_1)
-    np.save('./model_predictions/delta_learning/no_friction_combined_model.npy', k_wf_combined_model)
+    np.save('./model_predictions/delta_learning/with_friction_model_1.npy', k_wf_model_1)
+    np.save('./model_predictions/delta_learning/with_friction_combined_model.npy', k_wf_combined_model)
     #%%
 
 if __name__ == '__main__':

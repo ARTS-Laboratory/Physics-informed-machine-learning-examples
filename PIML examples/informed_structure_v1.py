@@ -2,7 +2,6 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Input, Dense, Conv1D, TimeDistributed, GRU, LSTM
-import matplotlib.pyplot as plt
 from numpy.lib.stride_tricks import sliding_window_view
 """
 Informed structure using convolutional and recurrent neural networks.
@@ -50,7 +49,7 @@ class DatasetGenerator(keras.utils.Sequence):
     def on_epoch_end(self):
         if(self.shuffle):
             np.random.shuffle(self.indices)
-
+#%%
 def main():
     #%%
     # load data

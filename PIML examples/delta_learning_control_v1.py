@@ -1,7 +1,6 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-import matplotlib.pyplot as plt
 from numpy.lib.stride_tricks import sliding_window_view
 from tensorflow.keras.layers import Dense, Input, Add
 """
@@ -50,7 +49,7 @@ class DatasetGenerator(keras.utils.Sequence):
     def on_epoch_end(self):
         if(self.shuffle):
             np.random.shuffle(self.indices)
-
+#%%
 def main():
     #%%
     # load data
@@ -85,7 +84,7 @@ def main():
     # training parameters
     train_len = 50
     batch_size = 32
-    epochs = 1
+    epochs = 20
     
     training_generator = DatasetGenerator(X_train_wf, Y_train_wf, train_len=train_len, batch_size=batch_size)
     test_generator = DatasetGenerator(X_test_wf, Y_test_wf, train_len=train_len, batch_size=batch_size)
@@ -114,6 +113,16 @@ def main():
         validation_data=test_generator,
     )
     model.save('./model_saves/delta_control')
+    
+    # with friction dataset
+    k_wf_control = np.zeros((20, k_test_wf.shape[1]-train_len+1))
+    for i in range(20):
+        # model 1
+        k_pred = model.predict(sliding_window_view(X_test_wf[i], [train_len]))
+        # undo scaling
+        k_pred = k_pred*k_std + k_m
+        k_wf_control[i] = k_pred.flatten()
+    np.save('./model_predictions/delta_learning/with_friction_control.npy', k_wf_control)
     #%%
 
 if __name__ == '__main__':

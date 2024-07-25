@@ -17,7 +17,7 @@ plt.rcParams.update({'mathtext.it': 'serif:italic'})
 plt.rcParams.update({'mathtext.bf': 'serif:bold'})
 plt.close('all')
 #%% load data
-all_data = np.load('./data/v3/with_friction.npy')
+all_data = np.load('./data/v4/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -45,7 +45,7 @@ plt.ylabel(r'acceleration ($m/s^2$)')
 plt.tight_layout()
 plt.savefig('./plots/one_accel.png', dpi=300)
 #%% plot one pure physics prediction
-all_data = np.load('./data/v2/all_data.npy')
+all_data = np.load('./data/v4/with_friction.npy')
 
 t = all_data[0,:,0]
 x = all_data[:,:,1]
@@ -67,6 +67,21 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pure_physics_pred.png', dpi=300)
+#%% pure physics cumulative error with time plot
+all_data = np.load('./data/v4/with_friction.npy')[:,:-1,:]
+t = all_data[0,:,0]
+rmse_t = np.load('./metric_results/pure_physics/rmse_t.npy')
+residual = np.load('./metric_results/pure_physics/residual.npy')
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(6, 2.7), sharex=True)
+ax1.plot(t, rmse_t)
+ax1.set_ylabel('RMSE (N/s)')
+ax2.plot(t, residual, linewidth=0.5)
+ax2.set_xlabel('time (s)')
+ax2.set_ylabel('residual (N)')
+ax2.set_xlim((0, 120))
+fig.tight_layout()
+fig.savefig('./plots/pure_physics_cumulative.png', dpi=300)
 #%% plot one pure nn prediction
 all_data = np.load('./data/v3/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s

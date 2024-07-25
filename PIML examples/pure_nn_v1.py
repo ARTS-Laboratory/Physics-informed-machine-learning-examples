@@ -2,7 +2,6 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Dense
-import matplotlib.pyplot as plt
 from numpy.lib.stride_tricks import sliding_window_view
 """
 Pure data-driven approach with neural networks.
@@ -49,6 +48,7 @@ class DatasetGenerator(keras.utils.Sequence):
     def on_epoch_end(self):
         if(self.shuffle):
             np.random.shuffle(self.indices)
+#%%
 def main():
     #%%
     # load data
@@ -121,17 +121,6 @@ def main():
     
     print('MSE:', mse)
     print('RMSE:', rmse)
-    # one prediction from the validation set
-    i = 0
-    plt.figure(figsize=(5, 4))
-    plt.plot(t[train_len-1:], k_pred_tot[i], c='tab:orange', label='pred stiffness')
-    plt.plot(t[train_len-1:], k_true[i], c='tab:blue', label='true stiffness')
-    plt.xlabel('time (s)')
-    plt.ylabel('stiffness (N/m)')
-    plt.xlim((0, 120))
-    plt.legend()
-    plt.tight_layout()
-    plt.savefig('./plots/pure_nn_pred.png', dpi=300)
     #%%
 
 if __name__ == '__main__':

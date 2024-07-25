@@ -1,7 +1,6 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-import matplotlib.pyplot as plt
 from tensorflow.keras.layers import Dense, Rescaling, Concatenate
 """
 PINNs as a soft constraint.
@@ -64,7 +63,7 @@ class DatasetGenerator(keras.utils.Sequence):
     def on_epoch_end(self):
         if(self.shuffle):
             np.random.shuffle(self.indices) # in place
-
+#%%
 def main():
     #%%
     # load data. As PINNs are an interpolation method, only one test can be used
