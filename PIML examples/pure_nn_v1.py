@@ -52,7 +52,7 @@ class DatasetGenerator(keras.utils.Sequence):
 def main():
     #%%
     # load data
-    all_data = np.load('./data/v3/with_friction.npy')
+    all_data = np.load('./data/v4/with_friction.npy')
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     all_data = all_data[:,:-1:20,:]
     
@@ -113,7 +113,7 @@ def main():
         k_pred = k_pred*k_std + k_m
         k_pred_tot[i] = k_pred.flatten()
     
-    np.save('./model_predictions/pure_nn/k_pred', k_pred_tot)
+    np.save('./model_predictions/pure_nn/k_pred.npy', k_pred_tot)
     k_true = k_test[:,train_len-1:]
     
     mse = np.mean(np.square(k_pred_tot - k_true))

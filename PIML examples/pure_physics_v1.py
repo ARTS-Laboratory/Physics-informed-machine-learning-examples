@@ -71,7 +71,7 @@ dt: time between acceleration samples
 #     plt.figure()
 #     plt.plot(freq, y)
 #%% load dataset
-all_data = np.load('./data/v2/all_data.npy')
+all_data = np.load('./data/v4/with_friction.npy')
 
 t = all_data[0,:,0]
 x = all_data[:,:,1]

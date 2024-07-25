@@ -54,7 +54,7 @@ class DatasetGenerator(keras.utils.Sequence):
 def main():
     #%%
     # load data
-    all_data = np.load('./data/v3/with_friction.npy')
+    all_data = np.load('./data/v4/with_friction.npy')
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     all_data = all_data[:,:-1:20,:]
     
@@ -133,6 +133,11 @@ def main():
         validation_data=test_generator,
     )
     model.save('./model_saves/informed_structure')
+    
+    # evaluate on testing data
+    Y_pred_test = model.predict(X_test)
+    k_pred_test = Y_pred_test*k_std + k_m
+    np.save('./model_predictions/informed_structure/k_pred.npy', k_pred_test)
     #%%
 
 if __name__ == '__main__':
