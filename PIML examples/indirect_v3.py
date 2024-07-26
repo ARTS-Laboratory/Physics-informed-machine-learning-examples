@@ -289,7 +289,8 @@ def main():
         k_pred = model.predict(sliding_window_view(x_test[i], [train_len]))
         k_pred_tot[i] = k_pred.flatten()
     
-    np.save('./model_predictions/indirect/k_pred', k_pred_tot)
+    
+    # np.save('./model_predictions/indirect/k_pred', k_pred_tot)
     k_true = k_test[:,train_len-1:]
     
     mse = np.mean(np.square(k_pred_tot - k_true))
@@ -299,6 +300,7 @@ def main():
     print('RMSE:', rmse)
     
     # one prediction from the validation set
+    # import matplotlib.pyplot as plt
     # i = 0
     # plt.figure(figsize=(5, 4))
     # plt.plot(t[train_len-1:], k_pred_tot[i], c='tab:orange', label='pred stiffness')
