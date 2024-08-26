@@ -138,12 +138,7 @@ with_friction_data = np.load('./data/v4/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 with_friction_data = with_friction_data[:,:-1:20,:]
 
-t_wf = with_friction_data[0,:,0]
-x_wf = with_friction_data[:,:,1]
-v_wf = with_friction_data[:,:,2]
-a_wf = with_friction_data[:,:,3]
 k_wf = with_friction_data[:,:,4]
-F_wf = with_friction_data[:,:,5]
 
 k_test = k_wf[80:,49:]
 
@@ -180,4 +175,81 @@ for model_name, model_n in zip(model_names, metrics_table):
             print(' & ', end='')
         else:
             print(' \\\\')
+#%% for PINN and delta learning, make RMSE tables for 0-60 and 60-120s
+# pinn
+test_data = np.load('./data/v4/pinn_test.npy').T
+# downsample by a factor of 20 so that sampling rate it 50 S/s
+test_data = test_data[:,::20]
+t = test_data[0,1:]
+x = test_data[1,1:]
+k = test_data[5,1:]
+pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
+x_pinn = pinn_pred[:,0]
 
+k_pinn = pinn_pred[:,1]
+k_control = np.load('./model_predictions/pinn/control_out.npy').flatten()
+
+k1 = k[t<60]
+k2 = k[t>=60]
+k_pinn1 = k_pinn[t<60]
+k_pinn2 = k_pinn[t>=60]
+k_control1 = k_control[t<60]
+k_control2 = k_control[t>=60]
+
+pinn_rmse1 = rmse(k1, k_pinn1)
+pinn_rmse2 = rmse(k2, k_pinn2)
+control_rmse1 = rmse(k1, k_control1)
+control_rmse2 = rmse(k2, k_control2)
+
+data = [[pinn_rmse1, control_rmse1], [pinn_rmse2, control_rmse2]]
+labels = ['0-60 s', '60-120 s']
+
+for i in range(2):
+    print(labels[i], end = ' & ')
+    for j in range(2):
+        print(round(data[i][j], 2), end='')
+        if(j == 0):
+            print (' & ', end='')
+        else:
+            print('\\\\')
+
+#%% delta learning table
+with_friction_data = np.load('./data/v4/with_friction.npy')
+# downsample by a factor of 20 so that sampling rate it 50 S/s
+with_friction_data = with_friction_data[:,:-1:20,:]
+
+t = with_friction_data[0,:,0]
+k_wf = with_friction_data[:,:,4]
+k_test = k_wf[80:,49:]
+
+indices1 = t[49:]<60
+indices2 = t[49:]>=60
+
+k_test1 = k_test[:,indices1]
+k_test2 = k_test[:,indices2]
+k_tests = [k_test1, k_test2]
+
+model_1_pred = np.load('./model_predictions/delta_learning/with_friction_model_1.npy')
+delta_model_pred = np.load('./model_predictions/delta_learning/with_friction_combined_model.npy')
+delta_control_pred = np.load('./model_predictions/delta_learning/with_friction_control.npy')
+
+model_1_pred1 = model_1_pred[:,indices1]
+model_1_pred2 = model_1_pred[:,indices2]
+delta_model_pred1 = delta_model_pred[:,indices1]
+delta_model_pred2 = delta_model_pred[:,indices2]
+delta_control_pred1 = delta_control_pred[:,indices1]
+delta_control_pred2 = delta_control_pred[:,indices2]
+
+labels = ['0-60 s', '60-120 s']
+k_pred_data = [[model_1_pred1, delta_model_pred1, delta_control_pred1],\
+               [model_1_pred2, delta_model_pred2, delta_control_pred2]]
+
+
+for i in range(2):
+    print(labels[i], end = ' & ')
+    for j in range(3):
+        print(round(rmse(k_tests[i], k_pred_data[i][j]), 2), end='')
+        if(j < 2):
+            print(' & ', end='')
+        else:
+            print('\\\\')

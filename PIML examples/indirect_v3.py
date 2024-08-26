@@ -117,7 +117,7 @@ class SpringMass(Layer):
         xdot = self.dt*xddot
         x = self.dt*xdot0
         xddot = -self.c*xdot - k*x + F
-        return x, [xdot, x]
+        return xddot, [xdot, x]
 
 '''
 RNN Layer for using SpringMass layer 
@@ -210,11 +210,10 @@ def main():
     x_train = x[:80]; x_test = x[80:]
     v_train = v[:80]; v_test = v[80:]
     a_train = a[:80]; a_test = a[80:]
-    k_train = k[:80]; k_test = k[80:]
+    k_train = k[:80]; k_test = k[80:] # k_train is never used
     F_train = F[:80]; F_test = F[80:]
     
     # normalize x and k
-    a_m = np.mean(a); x_std = np.std(a)
     k_m = np.mean(k); k_std = np.std(k)
     
     # training parameters
@@ -283,14 +282,16 @@ def main():
     for layer1, layer2 in zip(model.layers, k_model.layers):
         layer1.set_weights(layer2.get_weights())
     
+    model.save('./model_saves/indirect')
+    
     k_pred_tot = np.zeros((20, k_test.shape[1]-train_len+1))
     # k_pred_tot = np.zeros((20, (k_test.shape[1]-50)//10))
     for i in range(20):
-        k_pred = model.predict(sliding_window_view(x_test[i], [train_len]))
+        k_pred = model.predict(sliding_window_view(a_test[i], [train_len]))
         k_pred_tot[i] = k_pred.flatten()
     
     
-    # np.save('./model_predictions/indirect/k_pred', k_pred_tot)
+    np.save('./model_predictions/indirect/k_pred.npy', k_pred_tot)
     k_true = k_test[:,train_len-1:]
     
     mse = np.mean(np.square(k_pred_tot - k_true))

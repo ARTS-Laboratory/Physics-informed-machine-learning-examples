@@ -126,7 +126,7 @@ F = all_data[:,:,5]
 
 k_pred = np.load('./model_predictions/indirect/k_pred.npy')
 
-i=0
+i=5
 plt.figure(figsize=(6,2.3))
 plt.plot(t[49:], k_pred[i], c='tab:orange', label='predicted')
 plt.plot(t, k[80+i], c='tab:blue', label='true')
@@ -232,3 +232,28 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/delta_learning_pred.png', dpi=300)
+#%% plot an informed structure prediction
+all_data = np.load('./data/v4/with_friction.npy')
+# downsample by a factor of 20 so that sampling rate it 50 S/s
+all_data = all_data[:,:-1:20,:]
+
+t = all_data[0,:,0]
+x = all_data[:,:,1]
+v = all_data[:,:,2]
+a = all_data[:,:,3]
+k = all_data[:,:,4]
+F = all_data[:,:,5]
+
+k_pred = np.load('./model_predictions/informed_structure/k_pred.npy')
+
+i=0
+plt.figure(figsize=(6,2.3))
+plt.plot(t, k_pred[i], c='tab:orange', label='predicted')
+plt.plot(t, k[80+i], c='tab:blue', label='true')
+plt.xlim((0, 120))
+plt.ylim((450, 1550))
+plt.xlabel('time (s)')
+plt.ylabel('stiffness (N/m)')
+plt.legend()
+plt.tight_layout()
+plt.savefig('./plots/informed_structure  .png', dpi=300)
