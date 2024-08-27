@@ -154,7 +154,7 @@ def main():
                     d1 = tape3.batch_jacobian(all_out, all_inputs)
                     dx1 = d1[:,0:1] # gradients of just x
                     pax_t = dx1[:,:,0]# partial x w.r.t. t
-                    dx_dt = pax_t + tf.einsum('...j,...j->...', dx1[:,0,1:], psidot)
+                    dx_dt = pax_t[:,0] + tf.einsum('...j,...j->...', dx1[:,0,1:], psidot)
                 dx2 = tape2.batch_jacobian(dx1, all_inputs)
                 dx2 = tf.squeeze(dx2) # remove extraneous dimension
                 pa2x_t = dx2[:,0,0] # second partial x w.r.t. t
