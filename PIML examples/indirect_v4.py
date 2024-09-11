@@ -2,8 +2,9 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Layer
-from tensorflow.keras.layers import RNN, TimeDistributed, Dense, Rescaling
+from tensorflow.keras.layers import RNN, TimeDistributed, Dense, Rescaling, Conv1D
 from numpy.lib.stride_tricks import sliding_window_view
+import scipy
 """
 ML model with physics-integrated components does indirect measurement of k
 to solve inverse problem.
@@ -148,7 +149,8 @@ over the data per epoch his done optimally.
 """
 class DatasetGenerator(keras.utils.Sequence):
     
-    def __init__(self, x, v, a, F, batch_size=32, train_len=50, y_len=50, shuffle=True):
+    def __init__(self, x, v, a, F, batch_size=32,
+                 train_len=50, y_len=50, conv_N=10, shuffle=True):
         self.x = x
         self.v = v
         self.a = a
@@ -156,10 +158,11 @@ class DatasetGenerator(keras.utils.Sequence):
         self.batch_size=batch_size
         self.train_len= train_len
         self.y_len = y_len
+        self.conv_N = conv_N
         self.shuffle = shuffle
         
         self.N = x.shape[0]
-        self.T = self.x.shape[1] - (self.train_len+y_len) + 1
+        self.T = self.x.shape[1] - (self.train_len+self.y_len+self.conv_N) + 2
         self.n_samples = self.N*self.T
         
         self.indices = np.arange(self.n_samples)
@@ -171,20 +174,20 @@ class DatasetGenerator(keras.utils.Sequence):
     
     def __getitem__(self, index):
         inds = self.indices[index*self.batch_size:(index+1)*self.batch_size]
-        y_input = np.zeros((self.batch_size, self.train_len, self.y_len))
+        y_input = np.zeros((self.batch_size, self.train_len+self.conv_N-1, self.y_len))
         F_input = np.zeros((self.batch_size, self.train_len, 1))
         v_init = np.zeros((self.batch_size, 1))
         x_init = np.zeros((self.batch_size, 1))
         a_output = np.zeros((self.batch_size, self.train_len, 1))
         for k, ind in enumerate(inds):
             i = ind // self.T
-            j = (ind % self.T) + self.y_len + self.train_len
+            j = (ind % self.T) + self.y_len + self.train_len + self.conv_N - 2
             
             v_init[k] = self.v[i, j-self.train_len-1:j-self.train_len]
             x_init[k] = self.x[i,j-self.train_len-1:j-self.train_len]
             F_input[k] = np.expand_dims(self.F[i, j-self.train_len:j], -1)
             a_output[k] = np.expand_dims(self.a[i,j-self.train_len:j], -1)
-            y_input[k] = sliding_window_view(self.a[i:i+1,j-self.y_len-self.train_len+1:j], [self.y_len], axis=1)
+            y_input[k] = sliding_window_view(self.a[i:i+1,j-self.y_len-self.train_len-self.conv_N+2:j], [self.y_len], axis=1)
         
         return [y_input, F_input, v_init, x_init], a_output
     
@@ -219,10 +222,19 @@ def main():
     # training parameters
     train_len = 50
     batch_size = 32
+    conv_N = 10
     epochs = 20
     
-    training_generator = DatasetGenerator(x_train, v_train, a_train, F_train, batch_size=batch_size, train_len=train_len, y_len=train_len)
-    testing_generator = DatasetGenerator(x_test, v_test, a_test, F_test, batch_size=batch_size, train_len=train_len, y_len=train_len)
+    training_generator = DatasetGenerator(x_train, v_train, a_train, F_train,
+                                          batch_size=batch_size,
+                                          train_len=train_len,
+                                          y_len=train_len,
+                                          conv_N=conv_N)
+    testing_generator = DatasetGenerator(x_test, v_test, a_test, F_test,
+                                         batch_size=batch_size,
+                                         train_len=train_len,
+                                         y_len=train_len,
+                                         conv_N=conv_N)
     # system constants
     dt = tf.constant(t[1] - t[0], dtype=tf.float32)
     m = tf.constant(1.0, dtype=tf.float32)
@@ -233,6 +245,7 @@ def main():
         TimeDistributed(Dense(100, activation='sigmoid')),
         TimeDistributed(Dense(100, activation='sigmoid')),
         TimeDistributed(Dense(1, activation=None)),
+        Conv1D(1, conv_N, strides=1, padding='valid', use_bias=False, trainable=False),
         TimeDistributed(Rescaling(k_std, offset=k_m)),
     ])
     y_input = keras.Input([None, train_len])
@@ -264,34 +277,24 @@ def main():
         optimizer=adam,
         run_eagerly=False,
     )
+    # initialize 1d convolutional layer with mean weights
+    k_model.layers[-2].set_weights([np.full((10, 1, 1), 1/10)])
     training_model.fit(
         training_generator,
         epochs=epochs,
         validation_data = testing_generator,
     )
     # evaluating model
-    # Make a new model, removing TimeDistributed layers. This model works identically
-    # to the pure nn model.
-    model = keras.models.Sequential([
-        Dense(100, activation='sigmoid', input_shape=[train_len,]),
-        Dense(100, activation='sigmoid'),
-        Dense(100, activation='sigmoid'),
-        Dense(1, activation=None),
-        Rescaling(k_std, offset=k_m),
-    ])
-    for layer1, layer2 in zip(model.layers, k_model.layers):
-        layer1.set_weights(layer2.get_weights())
     
-    model.save('./model_saves/indirect')
-    
-    k_pred_tot = np.zeros((20, k_test.shape[1]-train_len+1))
+    k_pred_tot = np.zeros((20, k_test.shape[1]-train_len-conv_N+2))
     # k_pred_tot = np.zeros((20, (k_test.shape[1]-50)//10))
     for i in range(20):
-        k_pred = model.predict(sliding_window_view(a_test[i], [train_len]))
+        a_in = np.expand_dims(sliding_window_view(a_test[i], [train_len]), 0)
+        k_pred = k_model.predict(a_in)
         k_pred_tot[i] = k_pred.flatten()
     
     
-    np.save('./model_predictions/indirect/k_pred.npy', k_pred_tot)
+    np.save('./model_predictions/indirect/k_pred_filtered.npy', k_pred_tot)
     k_true = k_test[:,train_len-1:]
     
     mse = np.mean(np.square(k_pred_tot - k_true))

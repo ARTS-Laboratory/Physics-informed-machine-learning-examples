@@ -20,8 +20,8 @@ class DatasetGenerator(keras.utils.Sequence):
         self.return_k = return_k
         
         self.t = test_data[0]
-        x = test_data[1]
-        v = test_data[2]
+        self.x = x = test_data[1]
+        self.v = v = test_data[2]
         self.a = a = test_data[3]
         j = test_data[4]
         self.k = test_data[5]
@@ -47,8 +47,9 @@ class DatasetGenerator(keras.utils.Sequence):
         
         
         t_rtrn = self.t[inds]
+        x_rtrn = self.x[inds]
+        v_rtrn = self.v[inds]
         a_rtrn = self.a[inds]
-
         psi_rtrn = self.psi[inds]
         psidot_rtrn = self.psidot[inds]
         psiddot_rtrn = self.psiddot[inds]
@@ -57,8 +58,8 @@ class DatasetGenerator(keras.utils.Sequence):
         
         if(self.return_k):
             k_rtrn = self.k[inds]
-            return inputs, [psi_rtrn, psidot_rtrn, psiddot_rtrn, a_rtrn, k_rtrn]
-        return inputs, [psi_rtrn, psidot_rtrn, psiddot_rtrn, a_rtrn]
+            return inputs, [psi_rtrn, psidot_rtrn, psiddot_rtrn, x_rtrn, v_rtrn, a_rtrn, k_rtrn]
+        return inputs, [psi_rtrn, psidot_rtrn, psiddot_rtrn, x_rtrn, v_rtrn, a_rtrn]
     
     def on_epoch_end(self):
         if(self.shuffle):
@@ -76,10 +77,12 @@ def main():
     m = 1.0
     c = .2
     # training parameters
-    rho_k = .1 # weighting associated with the k prediction
-    rho_a = 1 # weighting associated with the acceleration prediction
-    rho_p = 10 # weighting associated with physics residual
-    epochs = 200
+    rho_k = .01 # weighting associated with the k prediction
+    rho_x = 100
+    rho_v = 100
+    rho_a = .1 # weighting associated with the acceleration prediction
+    rho_p = 1 # weighting associated with physics residual
+    epochs = 100
     batch_size = 32
     
     midpoint = test_data.shape[1]//2
@@ -120,17 +123,21 @@ def main():
     m = tf.constant(m, dtype=tf.float32)
     c = tf.constant(c, dtype=tf.float32)
     rho_k = tf.constant(rho_k, dtype=tf.float32)
+    rho_x = tf.constant(rho_x, dtype=tf.float32)
+    rho_v = tf.constant(rho_v, dtype=tf.float32)
     rho_a = tf.constant(rho_a, dtype=tf.float32)
     rho_p = tf.constant(rho_p, dtype=tf.float32)
     
     # record error history for each batch
-    error_rec = np.zeros((epochs, n_batches, 4))
+    error_rec = np.zeros((epochs, n_batches, 6))
     
     for epoch in range(epochs):
+        running_e_p = 0
+        running_e_x = 0
+        running_e_v = 0
+        running_e_a = 0
+        running_e_k = 0
         running_error = 0
-        running_physics_error = 0
-        running_acc_error = 0
-        running_k_error = 0
         for batch, (exp_data, phys_data) in enumerate(zip(experimental_generator, physics_generator)):
             exp_in = exp_data[0]; phys_in = phys_data[0]
             exp_values = exp_data[1]; phys_values = phys_data[1]
@@ -140,12 +147,16 @@ def main():
             psi = np.concatenate([exp_values[0], phys_values[0]], axis=0)
             psidot = np.concatenate([exp_values[1], phys_values[1]], axis=0)
             psiddot = np.concatenate([exp_values[2], phys_values[2]], axis=0)
-            a_true = np.concatenate([exp_values[3], phys_values[3]], axis=0)
+            x_true = np.concatenate([exp_values[3], phys_values[3]], axis=0)
+            v_true = np.concatenate([exp_values[4], phys_values[4]], axis=0)
+            a_true = np.concatenate([exp_values[5], phys_values[5]], axis=0)
             # cast to tf tensors
             all_inputs = tf.Variable(all_inputs, dtype=tf.float32)
             psi = tf.constant(psi, dtype=tf.float32)
             psidot = tf.constant(psidot, dtype=tf.float32)
             psiddot = tf.constant(psiddot, dtype=tf.float32)
+            x_true = tf.constant(x_true, dtype=tf.float32)
+            v_true = tf.constant(v_true, dtype=tf.float32)
             a_true = tf.constant(a_true, dtype=tf.float32)
             exp_k = tf.constant(exp_k, dtype=tf.float32)
             with tf.GradientTape() as tape1: # tape for error w.r.t. weights
@@ -166,28 +177,34 @@ def main():
                 d2x_dt2 += tf.einsum('...j,...j->...', dx1[:,0,1:], psiddot)
                 d2x_dt2 += tf.einsum('...ij,...i,...j->...', dx2[:,1:,1:], psidot, psidot)
                 F = psi[:,-1]
-                phys_error = rho_p*tf.reduce_mean(tf.square(F - m*d2x_dt2 - c*dx_dt - k_pred*x_pred)) # physics residual
-                acc_error = rho_a*tf.reduce_mean(tf.square(d2x_dt2 - a_true))
-                k_error = rho_k*tf.reduce_mean(tf.square(k_pred[:k_pred.shape[0]//2] - exp_k))
-                error = phys_error + acc_error + k_error
+                e_p = rho_p*tf.reduce_mean(tf.square(F - m*d2x_dt2 - c*dx_dt - k_pred*x_pred)) # physics residual
+                e_x = rho_x*tf.reduce_mean(tf.square(x_pred - x_true))
+                e_v = rho_v*tf.reduce_mean(tf.square(dx_dt - v_true))
+                e_a = rho_a*tf.reduce_mean(tf.square(d2x_dt2 - a_true))
+                e_k = rho_k*tf.reduce_mean(tf.square(k_pred[:k_pred.shape[0]//2] - exp_k))
+                error = e_p + e_x + e_v + e_a + e_k
             grads = tape1.gradient(error, model.trainable_weights)
             opt.apply_gradients(zip(grads, model.trainable_variables))
-            phys_error = float(phys_error)
-            acc_error = float(acc_error)
-            k_error = float(k_error)
+            e_p = float(e_p)
+            e_x = float(e_x)
+            e_v = float(e_v)
+            e_a = float(e_a)
+            e_k = float(e_k)
             error = float(error)
             
-            error_rec[epoch, batch] = [phys_error, acc_error, k_error, error]
+            error_rec[epoch, batch] = [e_p, e_x, e_v, e_a, e_k, error]
             
+            running_e_p = (running_e_p*batch + e_p)/(batch+1)
+            running_e_x = (running_e_x*batch + e_x)/(batch+1)
+            running_e_v = (running_e_v*batch + e_v)/(batch+1)
+            running_e_a = (running_e_a*batch + e_a)/(batch + 1)
+            running_e_k = (running_e_k*batch + e_k)/(batch+1)
             running_error = (running_error*batch + error)/(batch + 1)
-            running_physics_error = (running_physics_error*batch + phys_error)/(batch+1)
-            running_acc_error = (running_acc_error*batch + acc_error)/(batch+1)
-            running_k_error = (running_k_error*batch + k_error)/(batch+1)
             percent_complete = batch/n_batches*100
             
-            print('\r', 'epoch: %d, %.2f percent complete. error: %.3f (physics: %.3f, acc: %.3f, stiffness: %.3f)'\
-                  %(epoch+1, percent_complete, running_error, running_physics_error,\
-                    running_acc_error, running_k_error), end='')
+            print('\r', 'epoch: %d, %.2f percent complete. error: %.3f (p: %.3f, x: %.3f, v: %.3f, a: %.3f, k: %.3f)'\
+                  %(epoch+1, percent_complete, running_error, running_e_p,\
+                    running_e_x, running_e_v, running_e_a, running_e_k), end='')
         experimental_generator.on_epoch_end()
         physics_generator.on_epoch_end()
     # save model
