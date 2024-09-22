@@ -69,7 +69,7 @@ def main():
     #%%
     # load data. As PINNs are an interpolation method, only one test can be used
     # per model.
-    test_data = np.load('./data/v4/pinn_test.npy').T
+    test_data = np.load('./data/v5/pinn_test.npy').T
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     test_data = test_data[:,::20]
     
@@ -177,7 +177,7 @@ def main():
                 d2x_dt2 += tf.einsum('...j,...j->...', dx1[:,0,1:], psiddot)
                 d2x_dt2 += tf.einsum('...ij,...i,...j->...', dx2[:,1:,1:], psidot, psidot)
                 F = psi[:,-1]
-                e_p = rho_p*tf.reduce_mean(tf.square(F - m*d2x_dt2 - c*dx_dt - k_pred*x_pred)) # physics residual
+                e_p = rho_p*tf.reduce_mean(tf.square(F - m*a_true - c*v_true - k_pred*x_true)) # physics residual
                 e_x = rho_x*tf.reduce_mean(tf.square(x_pred - x_true))
                 e_v = rho_v*tf.reduce_mean(tf.square(dx_dt - v_true))
                 e_a = rho_a*tf.reduce_mean(tf.square(d2x_dt2 - a_true))
@@ -208,14 +208,14 @@ def main():
         experimental_generator.on_epoch_end()
         physics_generator.on_epoch_end()
     # save model
-    model.save('./model_saves/pinn')
+    model.save('./model_saves/v3/pinn')
     # save training history
-    np.save('./model_predictions/pinn/error_rec.npy', error_rec)
+    np.save('./model_predictions/pinn/v3/error_rec.npy', error_rec)
     # run through experiment and save results
     dataset_generator = DatasetGenerator(test_data, batch_size=batch_size, shuffle=False, return_k=True)
     
     pred_out  = model.predict(dataset_generator)
-    np.save('./model_predictions/pinn/pred_out.npy', pred_out)
+    np.save('./model_predictions/pinn/v3/pred_out.npy', pred_out)
     #%%
 
 if __name__ == '__main__':

@@ -57,7 +57,7 @@ def main():
     #%%
     # Step 1. This training procedure is basically the same as pure_nn.
     # load data
-    no_friction_data = np.load('./data/v4/no_friction.npy')
+    no_friction_data = np.load('./data/v5/no_friction.npy')
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     no_friction_data = no_friction_data[:,:-1:20,:]
     

@@ -50,7 +50,7 @@ metrics_table = np.zeros((9, len(metric_funcs)))
 #%% pure physics
 m = 1
 c = 0.2
-all_data = np.load('./data/v4/with_friction.npy')[:,:-1,:]
+all_data = np.load('./data/v5/with_friction.npy')[:,:-1,:]
 
 t = all_data[0,:,0]
 x = all_data[:,:,1]
@@ -82,7 +82,7 @@ ax3.set_xlabel(r'time ($s$)')
 ax3.set_ylabel(r'residual ($N$)')
 plt.tight_layout()
 #%% pure nn
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -96,7 +96,7 @@ k_pred = np.load('./model_predictions/pure_nn/k_pred.npy')
 
 metrics_table[1] = np.array([m(k_test, k_pred) for m in metric_funcs])
 #%% indirect
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -110,13 +110,13 @@ k_pred = np.load('./model_predictions/indirect/k_pred.npy')
 
 metrics_table[2] = np.array([m(k_test, k_pred) for m in metric_funcs])
 #%% pinn (and control)
-test_data = np.load('./data/v4/pinn_test.npy').T
+test_data = np.load('./data/v5/pinn_test.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 test_data = test_data[:,::20]
 t = test_data[0,1:]
 x = test_data[1,1:]
 k = test_data[5,1:]
-pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
+pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 x_pinn = pinn_pred[:,0]
 
 plt.figure()
@@ -134,7 +134,7 @@ plt.plot(t, k_control)
 metrics_table[3] = np.array([m(k, k_pinn) for m in metric_funcs])
 metrics_table[4] = np.array([m(k, k_control.flatten()) for m in metric_funcs])
 #%% delta learning (and control)
-with_friction_data = np.load('./data/v4/with_friction.npy')
+with_friction_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 with_friction_data = with_friction_data[:,:-1:20,:]
 
@@ -150,7 +150,7 @@ metrics_table[5] = np.array([m(k_test, model_1_pred) for m in metric_funcs])
 metrics_table[6] = np.array([m(k_test, delta_model_pred) for m in metric_funcs])
 metrics_table[7] = np.array([m(k_test, delta_control_pred) for m in metric_funcs])
 #%% informed structure
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 k = all_data[:,:,4]
@@ -176,14 +176,14 @@ for model_name, model_n in zip(model_names, metrics_table):
         else:
             print(' \\\\')
 #%% for PINN and delta learning, make RMSE tables for 0-60 and 60-120s
-# pinn
-test_data = np.load('./data/v4/pinn_test.npy').T
+#%% pinn
+test_data = np.load('./data/v5/pinn_test.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 test_data = test_data[:,::20]
 t = test_data[0,1:]
 x = test_data[1,1:]
 k = test_data[5,1:]
-pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
+pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 x_pinn = pinn_pred[:,0]
 
 k_pinn = pinn_pred[:,1]
@@ -214,7 +214,7 @@ for i in range(2):
             print('\\\\')
 
 #%% delta learning table
-with_friction_data = np.load('./data/v4/with_friction.npy')
+with_friction_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 with_friction_data = with_friction_data[:,:-1:20,:]
 

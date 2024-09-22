@@ -17,7 +17,7 @@ plt.rcParams.update({'mathtext.it': 'serif:italic'})
 plt.rcParams.update({'mathtext.bf': 'serif:bold'})
 plt.close('all')
 #%% load data
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -45,7 +45,7 @@ plt.ylabel(r'acceleration ($m/s^2$)')
 plt.tight_layout()
 plt.savefig('./plots/one_accel.png', dpi=300)
 #%% plot one pure physics prediction
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 
 t = all_data[0,:,0]
 x = all_data[:,:,1]
@@ -71,7 +71,7 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pure_physics_pred.png', dpi=300)
 #%% pure physics cumulative error with time plot
-all_data = np.load('./data/v4/with_friction.npy')[:,:-1,:]
+all_data = np.load('./data/v5/with_friction.npy')[:,:-1,:]
 t = all_data[0,:,0]
 rmse_k = np.load('./metric_results/pure_physics/rmse_k.npy')
 rmse_a = np.load('./metric_results/pure_physics/rmse_a.npy')
@@ -89,7 +89,7 @@ ax3.set_xlim((0, 120))
 fig.tight_layout()
 fig.savefig('./plots/pure_physics_cumulative.png', dpi=300)
 #%% plot one pure nn prediction
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -113,7 +113,7 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pure_nn_pred.png', dpi=300)
 #%% plot an indirect measurement test
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -139,7 +139,7 @@ plt.tight_layout()
 plt.savefig('./plots/indirect_measurement_pred.svg')
 plt.savefig('./plots/indirect_measurement_pred.png', dpi=300)
 #%% plot an indirect measurement (no friction) test
-all_data = np.load('./data/v4/no_friction.npy')
+all_data = np.load('./data/v5/no_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -163,9 +163,9 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/indirect_measurement_pred.png', dpi=300)
-all_data = np.load('./data/v4/no_friction.npy')
+all_data = np.load('./data/v5/no_friction.npy')
 #%% plot an indirect measurement, filtered test
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -190,7 +190,7 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/indirect_measurement_pred.png', dpi=300)
 #%%
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -236,8 +236,31 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pinn_pred.png', dpi=300)
-#%% plot pinn against control
-pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
+#%% plot pinn v2 against control
+pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
+control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
+test_data = np.load('./data/pinn_data/test_0.npy').T
+# downsample by a factor of 20 so that sampling rate it 50 S/s
+test_data = test_data[:,::20]
+
+t = test_data[0]
+k = test_data[5]
+k_pinn = pinn_pred[:,1]
+k_control = control_pred
+
+plt.figure(figsize=(6,2.3))
+plt.plot(t[1:], k_control, c='tab:green', label='control')
+plt.plot(t[1:], k_pinn, c='tab:orange', label='PINN')
+plt.plot(t, k, c='tab:blue', label='true')
+plt.xlim((0, 120))
+plt.ylim((300, 1550))
+plt.xlabel('time (s)')
+plt.ylabel('stiffness (N/m)')
+plt.legend()
+plt.tight_layout()
+plt.savefig('./plots/pinn_v2_and_control.png', dpi=300)
+#%% plot pinn v3 against control
+pinn_pred = np.load('./model_predictions/pinn/v3/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
 test_data = np.load('./data/pinn_data/test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
@@ -259,8 +282,8 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pinn_and_control.png', dpi=300)
-#%% plot pinn prediction of x (for personal checking)
-pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
+#%% plot pinn v2 prediction of x
+pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
 test_data = np.load('./data/pinn_data/test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
@@ -283,7 +306,7 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pinn_x_pred.png', dpi=300)
 #%% plot delta learning prediction
-with_friction_data = np.load('./data/v4/with_friction.npy')
+with_friction_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 with_friction_data = with_friction_data[:,:-1:20,:]
 
@@ -313,7 +336,7 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/delta_learning_pred.png', dpi=300)
 #%% plot a delta learning prediction for no friction dataset
-no_friction_data = np.load('./data/v4/no_friction.npy')
+no_friction_data = np.load('./data/v54/no_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 no_friction_data = no_friction_data[:,:-1:20,:]
 
@@ -351,7 +374,7 @@ for i in range(20):
     plt.plot(t_wf, a_wf[80+i], c='tab:orange')
 plt.tight_layout()
 #%% plot an informed structure prediction
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/v5/with_friction.npy')
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 

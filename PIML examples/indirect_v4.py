@@ -198,7 +198,7 @@ class DatasetGenerator(keras.utils.Sequence):
 def main():
     #%%
     # load data
-    all_data = np.load('./data/v4/with_friction.npy')
+    all_data = np.load('./data/v5/with_friction.npy')
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     all_data = all_data[:,:-1:20,:]
     
@@ -296,12 +296,6 @@ def main():
     
     np.save('./model_predictions/indirect/k_pred_filtered.npy', k_pred_tot)
     k_true = k_test[:,train_len-1:]
-    
-    mse = np.mean(np.square(k_pred_tot - k_true))
-    rmse = np.sqrt(mse)
-    
-    print('MSE:', mse)
-    print('RMSE:', rmse)
     
     # one prediction from the validation set
     # import matplotlib.pyplot as plt

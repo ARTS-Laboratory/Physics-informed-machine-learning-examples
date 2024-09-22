@@ -52,7 +52,7 @@ class DatasetGenerator(keras.utils.Sequence):
 def main():
     #%%
     # load data
-    all_data = np.load('./data/v4/with_friction.npy')
+    all_data = np.load('./data/v5/with_friction.npy')
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     all_data = all_data[:,:-1:20,:]
     

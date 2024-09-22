@@ -6,7 +6,7 @@ from tensorflow import keras
 look closer at the results of PINN training
 """
 #%% plot the pinn test
-pred = np.load('./model_predictions/pinn/pred_out.npy')
+pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 test_data = np.load('./data/pinn_data/test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 test_data = test_data[:,::20]
@@ -25,7 +25,7 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pinn_pred.png', dpi=300)
 #%% plot pinn against control 
-pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
+pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
 test_data = np.load('./data/pinn_data/test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
@@ -205,3 +205,57 @@ plt.plot(t, x, label='true x')
 plt.plot(t[1:], x_pred, marker='.', linewidth=0, label='pred. x')
 plt.legend()
 plt.tight_layout()
+#%% analyze v3
+pinn_pred = np.load('./model_predictions/pinn/v3/pred_out.npy')
+control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
+test_data = np.load('./data/pinn_data/test_0.npy').T
+# downsample by a factor of 20 so that sampling rate it 50 S/s
+test_data = test_data[:,::20]
+
+t = test_data[0]
+k = test_data[5]
+k_pinn = pinn_pred[:,1]
+k_control = control_pred
+
+plt.figure(figsize=(6,2.3))
+plt.plot(t[1:], k_control, c='tab:green', label='control')
+plt.plot(t[1:], k_pinn, c='tab:orange', label='PINN')
+plt.plot(t, k, c='tab:blue', label='true')
+plt.xlim((0, 120))
+plt.ylim((300, 1550))
+plt.xlabel('time (s)')
+plt.ylabel('stiffness (N/m)')
+plt.legend()
+plt.tight_layout()
+#%% error history of v3
+error_rec = np.load('./model_predictions/pinn/v3/error_rec.npy')
+e_epoch = np.mean(error_rec, axis=1)
+
+plt.figure()
+plt.plot(e_epoch[:,-1])
+#%% plot test data for physical consistency
+test_data = np.load('./data/pinn_data/test_0.npy').T
+x = test_data[1]
+v = test_data[2]
+a = test_data[3]
+k = test_data[5]
+F = test_data[6]
+m = 1
+c = 0.2
+
+i = 1
+x = x[:-i]
+v = v[i:]
+a = a[i:]
+k = k[i:]
+F = F[:-i]
+
+residual = F - m*a - c*v - k*x
+
+plt.figure()
+plt.plot(residual, label='residual')
+# plt.plot(F, label='force')
+# plt.plot(m*a, label='inertial force')
+# plt.plot(c*v, label='damping')
+# plt.plot(k*x, label='spring force')
+plt.legend()

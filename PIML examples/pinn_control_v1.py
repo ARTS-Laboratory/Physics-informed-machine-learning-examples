@@ -54,7 +54,7 @@ def main():
     #%%
     # load data. As PINNs are an interpolation method, only one test can be used
     # per model.
-    test_data = np.load('./data/pinn_data/test_0.npy').T
+    test_data = np.load('./data/v5/pinn_test.npy').T
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     test_data = test_data[:,::20]
     

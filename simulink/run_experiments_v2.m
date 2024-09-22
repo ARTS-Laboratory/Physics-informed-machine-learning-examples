@@ -44,9 +44,9 @@ for i = 1:n_tests
     k_signal = [t, k];
     %%
     if with_friction
-        out = sim('degrade_with_friction_v1.slx');
+        out = sim('degrade_with_friction_v2.slx');
     else
-        out = sim('degrade_no_friction_v1.slx');
+        out = sim('degrade_no_friction_v2.slx');
     end
     save_data_out(out, i, with_friction);
     %%
@@ -58,7 +58,9 @@ function save_data_out(out, i, with_friction)
     t = out.velocity(:,1);
     F = out.force(:,2);
     k = out.stiffness(:,2);
-
+    if any(isnan(a))
+        fprintf('nan values found.')
+    end
     arr = [t, x, v, a, k, F];
     if with_friction
         writematrix(arr, "./data/with_friction/test_"+i+".csv")
