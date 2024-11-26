@@ -1,0 +1,64 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Dataset and ML models}{1}{section.2}\protected@file@percent }
+\newlabel{eq:ideal}{{2.1}{1}{Dataset and ML models}{equation.2.1}{}}
+\newlabel{eq:with friction}{{2.2}{1}{Dataset and ML models}{equation.2.2}{}}
+\newlabel{fig:all k}{{2}{2}{Dataset and ML models}{equation.2.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces k(t) for 100 tests.}}{2}{figure.1}\protected@file@percent }
+\newlabel{fig:accel}{{2}{2}{Dataset and ML models}{figure.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Measured acceleration for one test.}}{2}{figure.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}Pure physics implementation}{2}{section.3}\protected@file@percent }
+\newlabel{pure physics}{{3}{2}{Pure physics implementation}{section.3}{}}
+\newlabel{fig:physics_pred}{{3}{3}{Pure physics implementation}{section.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Physics prediction of one test.}}{3}{figure.3}\protected@file@percent }
+\newlabel{fig:pure physics cumulative}{{3}{3}{Pure physics implementation}{figure.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Data of pure physics prediction with respect to time, cumulative to all tests: showing; (a) RMSE error of reconstructed stiffness $k$; (b) RMSE error of reconstructed acceleration; and; (c) residual amount of lost physics.}}{3}{figure.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Data-driven implementation}{3}{section.4}\protected@file@percent }
+\newlabel{data driven}{{4}{3}{Data-driven implementation}{section.4}{}}
+\citation{Coble2024}
+\newlabel{fig:nn_pred}{{4}{4}{Data-driven implementation}{section.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Neural network prediction of one test.}}{4}{figure.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Methodology \#1: indirect measurement/hard constraint}{4}{section.5}\protected@file@percent }
+\newlabel{indirect}{{5}{4}{Methodology \#1: indirect measurement/hard constraint}{section.5}{}}
+\newlabel{fig:indirect shape}{{5}{4}{Methodology \#1: indirect measurement/hard constraint}{equation.5.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Hard constraint inference method. For this work, the chosen ODE solver is RK4 and $t_i$ inputs are 50 points from the acceleration signal over the previous second.}}{4}{figure.6}\protected@file@percent }
+\citation{Raissi2019}
+\newlabel{fig:indirect_pred}{{5}{5}{Methodology \#1: indirect measurement/hard constraint}{figure.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Indirect measurement prediction of $k(t)$ for one test. Even with the mean-value filter, ringing still occurs at the beginning and from 70-100 seconds in the test.}}{5}{figure.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Methodology \#2: PINNs/soft constraint}{5}{section.6}\protected@file@percent }
+\newlabel{pinns}{{6}{5}{Methodology \#2: PINNs/soft constraint}{section.6}{}}
+\newlabel{fig:pinn_shape}{{6}{5}{Methodology \#2: PINNs/soft constraint}{equation.6.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Model architecture for PINN.}}{5}{figure.8}\protected@file@percent }
+\newlabel{eq:first derivative}{{6.2}{6}{Methodology \#2: PINNs/soft constraint}{equation.6.2}{}}
+\newlabel{eq:second derivative}{{6.3}{6}{Methodology \#2: PINNs/soft constraint}{equation.6.3}{}}
+\newlabel{tab:rho vals}{{6}{6}{Methodology \#2: PINNs/soft constraint}{equation.6.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces RMSE comparison between PINN and control model.}}{6}{table.1}\protected@file@percent }
+\newlabel{fig:pinn prediction}{{6}{7}{Methodology \#2: PINNs/soft constraint}{table.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces PINN prediction and control comparison.}}{7}{figure.9}\protected@file@percent }
+\newlabel{tab:pinn metrics}{{6}{7}{Methodology \#2: PINNs/soft constraint}{figure.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces RMSE comparison between PINN and control model.}}{7}{table.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Methodology \#3: Delta Learning}{7}{section.7}\protected@file@percent }
+\newlabel{delta learning}{{7}{7}{Methodology \#3: Delta Learning}{section.7}{}}
+\newlabel{fig:delta shape}{{7}{7}{Methodology \#3: Delta Learning}{section.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Model architecture for (a) model 1 and (b) delta learning model.}}{7}{figure.10}\protected@file@percent }
+\newlabel{delta metrics}{{7}{8}{Methodology \#3: Delta Learning}{figure.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces RMSE comparison between initial and combined model.}}{8}{table.3}\protected@file@percent }
+\newlabel{fig:delta learning prediction}{{7}{8}{Methodology \#3: Delta Learning}{table.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Prediction of delta learning model for one test.}}{8}{figure.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Methodology \#4: Informed architecture}{8}{section.8}\protected@file@percent }
+\newlabel{informed}{{8}{8}{Methodology \#4: Informed architecture}{section.8}{}}
+\bibdata{references.bib}
+\bibcite{Coble2024}{1}
+\newlabel{fig:informed shape}{{8}{9}{Methodology \#4: Informed architecture}{section.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Model architecture of the informed structure model.}}{9}{figure.12}\protected@file@percent }
+\newlabel{fig:informed pred}{{8}{9}{Methodology \#4: Informed architecture}{figure.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Informed structure prediction of one test.}}{9}{figure.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Comparison}{9}{section.9}\protected@file@percent }
+\newlabel{all metrics}{{9}{9}{Comparison}{section.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Metric comparison between all models.}}{9}{table.4}\protected@file@percent }
+\bibcite{Raissi2019}{2}
+\bibstyle{spiebib}
+\gdef \@abspage@last{10}

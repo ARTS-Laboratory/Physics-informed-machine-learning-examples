@@ -1,0 +1,15 @@
+\begin{thebibliography}{1}
+
+\bibitem{Coble2024}
+D.~Coble, L.~Cao, A.~R. Downey, and J.~M. Ricles, ``Physics-informed machine
+  learning for dry friction and backlash modeling in structural control
+  systems,'' {\em Mechanical Systems and Signal Processing}~{\bf 218},
+  p.~111522, Sept. 2024.
+
+\bibitem{Raissi2019}
+M.~Raissi, P.~Perdikaris, and G.~Karniadakis, ``Physics-informed neural
+  networks: A deep learning framework for solving forward and inverse problems
+  involving nonlinear partial differential equations,'' {\em Journal of
+  Computational Physics}~{\bf 378}, pp.~686--707, Feb. 2019.
+
+\end{thebibliography}

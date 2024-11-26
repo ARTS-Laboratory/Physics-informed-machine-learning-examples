@@ -1,10 +1,4 @@
-/LaTeX
-*.csv
-/simulink/slprj
-/simulink/data/slprj
-/PIML examples/data
-/PIML examples/model_saves
-/PIML examples/plots
-/PIML examples/__pycache__
-/PIML examples/model_predictions
-/simulink/data
+
+PIML examples/data/v5/no_friction.npy
+PIML examples/data/v5/with_friction.npy
+PIML examples/model_predictions/pure_physics/k_pred.npy
