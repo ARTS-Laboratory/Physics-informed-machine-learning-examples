@@ -3,8 +3,15 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
 """
+Author: Nile Coble
+
 look closer at the results of PINN training
+
+
+
 """
+
+
 #%% plot the pinn test
 pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 test_data = np.load('./data/pinn_data/test_0.npy').T
@@ -24,6 +31,7 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pinn_pred.png', dpi=300)
+
 #%% plot pinn against control 
 pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
@@ -47,6 +55,7 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pinn_and_control.png', dpi=300)
+
 #%% plot pinn prediction of x
 pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()

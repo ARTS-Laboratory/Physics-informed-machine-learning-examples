@@ -3,7 +3,12 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Dense, Rescaling, Concatenate
 """
+Author: Nile Coble
+
 PINNs as a soft constraint.
+
+
+
 """
 #%%
 """
@@ -12,6 +17,8 @@ over the data per epoch his done optimally.
 
 returns batches
 """
+
+
 class DatasetGenerator(keras.utils.Sequence):
     
     def __init__(self, test_data, batch_size=32, shuffle=True, return_k = True):

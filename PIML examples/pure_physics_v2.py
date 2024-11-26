@@ -1,8 +1,14 @@
 import numpy as np
 from scipy.optimize import curve_fit
 """
+Author: Nile Coble
+
 Using only a physics understanding of the system when calculating k
 """
+
+
+
+
 #%%
 '''
 Function to solve the spring-mass system. Solved with RK4.
