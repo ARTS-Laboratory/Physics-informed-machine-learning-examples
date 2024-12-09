@@ -10,7 +10,7 @@ c=.2;
 freq = 5;
 n_tests = 100;
 
-with_friction = false;
+with_friction = true;
 % friction element
 F_brk = 0.05;
 v_brk = 0.01;
