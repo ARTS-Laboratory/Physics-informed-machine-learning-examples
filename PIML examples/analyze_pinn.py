@@ -14,7 +14,7 @@ look closer at the results of PINN training
 
 #%% plot the pinn test
 pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
-test_data = np.load('./data/pinn_data/test_0.npy').T
+test_data = np.load('./data/pinn_test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 test_data = test_data[:,::20]
 
@@ -35,7 +35,7 @@ plt.savefig('./plots/pinn_pred.png', dpi=300)
 #%% plot pinn against control 
 pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
-test_data = np.load('./data/pinn_data/test_0.npy').T
+test_data = np.load('./data/pinn_test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 test_data = test_data[:,::20]
 

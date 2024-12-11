@@ -1,9 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+
 """
 examining data
+
+
 """
-all_data = np.load('./data/v4/with_friction.npy')
+all_data = np.load('./data/with_friction.npz')['data']
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 all_data = all_data[:,:-1:20,:]
 
@@ -32,7 +35,7 @@ plt.tight_layout()
 #%% make a new indirect model and feed the predictions and true k to get error
 import tensorflow as tf
 from tensorflow import keras
-from indirect_v3 import SpringMass, SpringMassRNN, DatasetGenerator
+from indirect_v4 import SpringMass, SpringMassRNN, DatasetGenerator
 from numpy.lib.stride_tricks import sliding_window_view
 
 class DatasetGenerator(keras.utils.Sequence):

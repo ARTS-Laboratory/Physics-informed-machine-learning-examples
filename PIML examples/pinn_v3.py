@@ -7,11 +7,6 @@ Author: Nile Coble
 
 PINNs as a soft constraint.
 
-
-
-"""
-#%%
-"""
 The training generator creates a sort-of virtual array so that passing
 over the data per epoch his done optimally.
 
@@ -76,7 +71,7 @@ def main():
     #%%
     # load data. As PINNs are an interpolation method, only one test can be used
     # per model.
-    test_data = np.load('./data/v5/pinn_test.npy').T
+    test_data = np.load('./data/pinn_test_0.npy').T
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     test_data = test_data[:,::20]
     

@@ -57,7 +57,7 @@ def spring_mass_system1(t, m, c, k, F, x0, xdot0, dt):
 def main():
     #%%
     # load dataset
-    all_data = np.load('./data/v5/with_friction.npy')
+    all_data = np.load('./data/with_friction.npz')['data']
     
     t = all_data[0,:,0]
     x = all_data[:,:,1]
