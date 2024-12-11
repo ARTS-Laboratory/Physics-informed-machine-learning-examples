@@ -35,7 +35,7 @@ plt.tight_layout()
 #%% make a new indirect model and feed the predictions and true k to get error
 import tensorflow as tf
 from tensorflow import keras
-from indirect_v3 import SpringMass, SpringMassRNN, DatasetGenerator
+from indirect_v4 import SpringMass, SpringMassRNN, DatasetGenerator
 from numpy.lib.stride_tricks import sliding_window_view
 
 class DatasetGenerator(keras.utils.Sequence):
