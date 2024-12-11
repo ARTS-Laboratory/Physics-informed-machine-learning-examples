@@ -158,8 +158,8 @@ plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/indirect_measurement_pred.png', dpi=300)
 
-#%% plot pinn v3 against control
-pinn_pred = np.load('./model_predictions/pinn/v3/pred_out.npy')
+#%% plot pinn against control
+pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
 test_data = np.load('./data/pinn_test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
