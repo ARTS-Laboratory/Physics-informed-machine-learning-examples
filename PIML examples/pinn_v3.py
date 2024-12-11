@@ -210,14 +210,14 @@ def main():
         experimental_generator.on_epoch_end()
         physics_generator.on_epoch_end()
     # save model
-    model.save('./model_saves/v3/pinn')
+    model.save('./model_saves/pinn')
     # save training history
-    np.save('./model_predictions/pinn/v3/error_rec.npy', error_rec)
+    np.save('./model_predictions/pinn/error_rec.npy', error_rec)
     # run through experiment and save results
     dataset_generator = DatasetGenerator(test_data, batch_size=batch_size, shuffle=False, return_k=True)
     
     pred_out  = model.predict(dataset_generator)
-    np.save('./model_predictions/pinn/v3/pred_out.npy', pred_out)
+    np.save('./model_predictions/pinn/pred_out.npy', pred_out)
     #%%
 
 if __name__ == '__main__':
