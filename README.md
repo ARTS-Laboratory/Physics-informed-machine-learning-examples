@@ -23,3 +23,11 @@ The files are:
 1. PIML examples/data/v5/no_friction.npy - replaced with npz file that should push
 1. PIML examples/data/v5/with_friction.npy - replaced with npz file that should push
 1. PIML examples/model_predictions/pure_physics/k_pred.npy - under 200 MB, I thought this would push.
+
+# Version control
+Tensorflow 2.13.0 was used to develop this code.
+
+
+
+
+

@@ -32,6 +32,7 @@ plt.plot(t[49:], k_test[i,49:], label='true')
 plt.plot(t[49:], k_pred[i], label='predicted')
 plt.legend()
 plt.tight_layout()
+
 #%% make a new indirect model and feed the predictions and true k to get error
 import tensorflow as tf
 from tensorflow import keras
@@ -86,6 +87,7 @@ class DatasetGenerator(keras.utils.Sequence):
     def on_epoch_end(self):
         if(self.shuffle):
             np.random.shuffle(self.indices)
+            
 #%% create the dataset generator
 train_len = 50
 batch_size = 32
@@ -103,6 +105,7 @@ a_test = a_test[i:i+1]
 F_test = F_test[i:i+1]
 
 testing_generator = DatasetGenerator(x_test, v_test, a_test, F_test, k_pred, batch_size=batch_size, train_len=train_len, y_len=train_len, shuffle=False)
+
 #%%
 dt = tf.constant(t[1] - t[0], dtype=tf.float32)
 m = tf.constant(1.0, dtype=tf.float32)
@@ -132,6 +135,7 @@ model = keras.Model(
 )
 
 a_output = model.predict(testing_generator)
+
 #%%
 i=1300
 fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)

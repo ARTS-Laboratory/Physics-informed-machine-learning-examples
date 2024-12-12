@@ -115,13 +115,14 @@ def main():
         for weights in layer.get_weights():
             n_weights += weights.size
     print('number of model weights:', n_weights)
-    
-    pure_nn = keras.models.load_model('./model_saves/pure_nn')
-    n_weights_nn = 0
-    for layer in pure_nn.layers:
-        for weights in layer.get_weights():
-            n_weights_nn += weights.size
-    print('compared against pure NN:', n_weights_nn)
+  
+    ############# Commented out per email from Nile #################
+    # pure_nn = keras.models.load_model('./model_saves/pure_nn')
+    # n_weights_nn = 0
+    # for layer in pure_nn.layers:
+    #     for weights in layer.get_weights():
+    #         n_weights_nn += weights.size
+    # print('compared against pure NN:', n_weights_nn)
     
     
     # train the model

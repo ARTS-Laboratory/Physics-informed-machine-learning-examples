@@ -14,9 +14,9 @@
 1. [test_delta.py](test_delta.py)
     * Code starts and runs
 1. [test_indirect.py](test_indirect.py)
-    * Code does not run "ModuleNotFoundError: No module named 'indirect_v3'"
+    * Code runs, no errors
 1. [analyze_pinn.py](analyze_pinn.py)
-    * Code does not run "FileNotFoundError: [Errno 2] No such file or directory: './model_predictions/pinn/pred_out.npy'"
+    * Code does not run "FileNotFoundError: [Errno 2] No such file or directory: './model_predictions/pinn/error_rec.npy'"
 1. [delta_learning_control_v1.py](delta_learning_control_v1.py)
     * Will start training epochs
 1. [delta_learning_v1.py](delta_learning_v1.py)
@@ -27,6 +27,9 @@
     * Code starts running and training epochs
 1. [informed_structure_v1.py](informed_structure_v1.py)
     * Code does not run" OSError: Cannot parse keras metadata at path ./model_saves/pure_nn\keras_metadata.pb: Received error: Field number 0 is illegal."
+    * Per Nile in email, "This seems like a tensorflow version error. I was using tensorflow 2.13.0, it's probably easiest to retrain the pure NN in your environment. Either way, the lines that cause this error (119-124) are completely non-essential and can be commented out if you want."
+    * Lines 119-124 were commented out. 
+    * Code now starts to train epochs.
 1. [metrics_v1.py](metrics_v1.py)
     * runs and finishes
 
