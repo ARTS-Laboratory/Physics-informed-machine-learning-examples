@@ -247,7 +247,9 @@ x_pred = x_tot.flatten()[:t.size-1]
 
 #%% plot time vs acceleration
 plt.figure()
-plt.legend('time vs acceleration')
+plt.title('time vs acceleration')
+plt.xlabel('time (s)')
+plt.ylabel(r'acceleration (m/s$^2%?)')
 plt.plot(t, a, label='true acc.')
 plt.plot(t[1:], a_pred, marker='.', linewidth=0, label='pred. acc.')
 plt.legend()
@@ -255,7 +257,9 @@ plt.tight_layout()
 
 #%% plot time vs velocity
 plt.figure()
-plt.legend('time vs velocity')
+plt.title('time vs velocity')
+plt.xlabel('time (s)')
+plt.ylabel('velocity (m/s?)')
 plt.plot(t, v, label='true v')
 plt.plot(t[1:], v_pred, marker='.', linewidth=0, label='pred. v')
 plt.legend()
@@ -263,7 +267,9 @@ plt.tight_layout()
 
 #%% plot time vs displacement
 plt.figure()
-plt.legend('time vs displacement')
+plt.title('time vs displacement')
+plt.xlabel('time (s)')
+plt.ylabel('displacement (m?)')
 plt.plot(t, x, label='true x')
 plt.plot(t[1:], x_pred, marker='.', linewidth=0, label='pred. x')
 plt.legend()
