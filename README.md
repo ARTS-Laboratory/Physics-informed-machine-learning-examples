@@ -20,9 +20,10 @@ PIML methods:
 This repo has some files too large for GitHub. We may try to get these to work with lfs in the future, for now you can find the files [here](https://www.dropbox.com/scl/fo/p7u6dwy1t8o83hk3dgnlz/AO3S344MKnTcE55aHe9J2Gs?rlkey=6aor3ivq2wrm9j06h62nnedgn&dl=0).
 
 The files are:
-1. PIML examples/data/v5/no_friction.npy - replaced with npz file that should push
-1. PIML examples/data/v5/with_friction.npy - replaced with npz file that should push
-1. PIML examples/model_predictions/pure_physics/k_pred.npy - under 200 MB, I thought this would push.
+1. PIML examples/data/v5/no_friction.npy
+1. PIML examples/data/v5/with_friction.npy
+1. PIML examples/model_predictions/pure_physics/k_pred.npy 
+
 
 # Version control
 Tensorflow 2.13.0 was used to develop this code.

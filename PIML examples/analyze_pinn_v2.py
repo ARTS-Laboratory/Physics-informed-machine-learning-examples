@@ -8,6 +8,7 @@ Author: Nile Coble
 look closer at the results of PINN training
 
 """
+
 #%% 
 pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
@@ -30,6 +31,8 @@ plt.xlabel('time (s)')
 plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
+
+
 #%% plot pinn prediction of x
 pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
 control_pred = np.load('./model_predictions/pinn/control_out.npy').flatten()
@@ -53,12 +56,14 @@ plt.ylabel('stiffness (N/m)')
 plt.legend()
 plt.tight_layout()
 plt.savefig('./plots/pinn_x_pred.png', dpi=300)
+
 #%% error history of v3
 error_rec = np.load('./model_predictions/pinn/error_rec.npy')
 e_epoch = np.mean(error_rec, axis=1)
 
 plt.figure()
 plt.plot(e_epoch[:,-1])
+
 #%% plot test data for physical consistency
 # test_data = np.load('./data/pinn_data/test_0.npy').T # Line changed to that below by Austin Downey
 test_data = np.load('./data/pinn_test_0.npy').T
@@ -86,6 +91,8 @@ plt.plot(residual, label='residual')
 # plt.plot(c*v, label='damping')
 # plt.plot(k*x, label='spring force')
 plt.legend()
+
+
 #%% test out model
 class DatasetGenerator(keras.utils.Sequence):
     
@@ -139,7 +146,8 @@ class DatasetGenerator(keras.utils.Sequence):
         if(self.shuffle):
             np.random.shuffle(self.indices) # in place
 
-#%%
+#%% Set up loop
+
 test_data = np.load('./data/pinn_test_0.npy').T
 # downsample by a factor of 20 so that sampling rate it 50 S/s
 test_data = test_data[:,::20]
@@ -162,12 +170,21 @@ batch_size = 32
 
 dataset_generator = DatasetGenerator(test_data, batch_size=batch_size, shuffle=False, return_k=True)
 
+#%% Kills the kernal
+
+# Does not point to a file. Should it? 
+# Maybe a Tensorflow version issue
+
 model = keras.models.load_model('./model_saves/pinn')
+
+
+#%% 
 
 a_tot = np.zeros((len(dataset_generator), batch_size))
 v_tot = np.zeros((len(dataset_generator), batch_size))
 x_tot = np.zeros((len(dataset_generator), batch_size))
 
+#%% Run loop
 for batch, data in enumerate(dataset_generator):
     inputs = tf.Variable(data[0])
     psi = tf.constant(data[1][0])
@@ -200,22 +217,27 @@ for batch, data in enumerate(dataset_generator):
     v_tot[batch] = v_batch
     x_tot[batch] = x_batch
     print('finished batch', batch)
-#%%
+
+#%% 
+
 a_pred = a_tot.flatten()[:t.size-1]
 v_pred = v_tot.flatten()[:t.size-1]
 x_pred = x_tot.flatten()[:t.size-1]
+
 #%%
 plt.figure()
 plt.plot(t, a, label='true acc.')
 plt.plot(t[1:], a_pred, marker='.', linewidth=0, label='pred. acc.')
 plt.legend()
 plt.tight_layout()
+
 #%%
 plt.figure()
 plt.plot(t, v, label='true v')
 plt.plot(t[1:], v_pred, marker='.', linewidth=0, label='pred. v')
 plt.legend()
 plt.tight_layout()
+
 #%%
 plt.figure()
 plt.plot(t, x, label='true x')
