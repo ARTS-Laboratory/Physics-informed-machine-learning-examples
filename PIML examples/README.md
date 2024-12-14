@@ -25,8 +25,9 @@
         * To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
         * OMP: Error #15: Initializing libiomp5, but found libiomp5md.dll already initialized.
         * OMP: Hint This means that multiple copies of the OpenMP runtime have been linked into the program. That is dangerous, since it can degrade performance or cause incorrect results. The best thing to do is to ensure that only a single OpenMP runtime is linked into the process, e.g. by avoiding static linking of the OpenMP runtime in any library. As an unsafe, unsupported, undocumented workaround you can set the environment variable KMP_DUPLICATE_LIB_OK=TRUE to allow the program to continue to execute, but that may cause crashes or silently produce incorrect results. For more information, please see http://openmp.llvm.org/
-
-    
+    * A workaround for the error was found  
+    [here](https://stackoverflow.com/questions/53014306/error-15-initializing-libiomp5-dylib-but-found-libiomp5-dylib-already-initial)
+    and the I added a break statment before the last iteration of the for loop.
 1. [delta_learning_control_v1.py](delta_learning_control_v1.py)
     * Will start training epochs
 1. [delta_learning_v1.py](delta_learning_v1.py)

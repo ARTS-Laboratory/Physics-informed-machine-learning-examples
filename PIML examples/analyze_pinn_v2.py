@@ -2,6 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow import keras
+plt.close('all')
+
+
+################## fixed console crashing #######################
+# The console crahsed when loadking model
+# https://stackoverflow.com/questions/53014306/error-15-initializing-libiomp5-dylib-but-found-libiomp5-dylib-already-initial
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+#################################################################
+
+
+
 """
 Author: Nile Coble
 
@@ -170,10 +182,8 @@ batch_size = 32
 
 dataset_generator = DatasetGenerator(test_data, batch_size=batch_size, shuffle=False, return_k=True)
 
-#%% Kills the kernal
-
-# Does not point to a file. Should it? 
-# Maybe a Tensorflow version issue
+#%% Kills the console unless os.environ['KMP_DUPLICATE_LIB_OK']='True'
+# this may be an issue with my install. Also, ths line may cause bad results to be returned.  
 
 model = keras.models.load_model('./model_saves/pinn')
 
@@ -213,6 +223,12 @@ for batch, data in enumerate(dataset_generator):
     v_batch = dx_dt.numpy()
     x_batch = x_pred.numpy()
     
+    # added by Austin Downey as I was getting the error:     a_tot[batch] = a_batch 
+    # ValueError: could not broadcast input array from shape (16,) into shape (32,)
+    if batch==186:
+        break
+    
+    
     a_tot[batch] = a_batch
     v_tot[batch] = v_batch
     x_tot[batch] = x_batch
@@ -224,22 +240,25 @@ a_pred = a_tot.flatten()[:t.size-1]
 v_pred = v_tot.flatten()[:t.size-1]
 x_pred = x_tot.flatten()[:t.size-1]
 
-#%%
+#%% plot time vs acceleration
 plt.figure()
+plt.legend('time vs acceleration')
 plt.plot(t, a, label='true acc.')
 plt.plot(t[1:], a_pred, marker='.', linewidth=0, label='pred. acc.')
 plt.legend()
 plt.tight_layout()
 
-#%%
+#%% plot time vs velocity
 plt.figure()
+plt.legend('time vs velocity')
 plt.plot(t, v, label='true v')
 plt.plot(t[1:], v_pred, marker='.', linewidth=0, label='pred. v')
 plt.legend()
 plt.tight_layout()
 
-#%%
+#%% plot time vs displacement
 plt.figure()
+plt.legend('time vs displacement')
 plt.plot(t, x, label='true x')
 plt.plot(t[1:], x_pred, marker='.', linewidth=0, label='pred. x')
 plt.legend()

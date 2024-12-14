@@ -13,4 +13,3 @@ Siculink and simscape code for generating data.
 1. to_numpy.py
     * Run to convert .csv files to .npy.
     * This code creates three files in the "PIML examples\data" data folder, pinn_test_0.npy, with_friction.npz and no_friction.npz.
-    * The comressed versions are used to get them under 500 MB so they can push to GitHub
