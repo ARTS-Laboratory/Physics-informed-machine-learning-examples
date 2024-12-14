@@ -228,11 +228,6 @@ for batch, data in enumerate(dataset_generator):
     v_batch = np.pad(v_batch, (0, batch_size - v_batch.size))
     x_batch = np.pad(x_batch, (0, batch_size - x_batch.size))
     
-    # added by Austin Downey as I was getting the error:     a_tot[batch] = a_batch 
-    # ValueError: could not broadcast input array from shape (16,) into shape (32,)
-    # if batch==186:
-    #     break
-    
     
     a_tot[batch] = a_batch
     v_tot[batch] = v_batch
