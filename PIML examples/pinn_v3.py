@@ -37,6 +37,8 @@ class DatasetGenerator(keras.utils.Sequence):
         self.n_samples = self.psi.shape[0]
         # remove first datapoint for t, a, k
         self.t = self.t[1:]; self.a = self.a[1:]; self.k = self.k[1:]
+        self.x = self.x[1:]; self.v = self.v[1:];
+        
         self.indices = np.arange(self.n_samples)
         if(self.shuffle):
             np.random.shuffle(self.indices)
@@ -75,15 +77,31 @@ def main():
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     test_data = test_data[:,::20]
     
+    t = test_data[0]
+    x = test_data[1]
+    v = test_data[2]
+    a = test_data[3]
+    k = test_data[5]
+    F = test_data[6]
+    
     # model parameters
     m = 1.0
     c = .2
     # training parameters
-    rho_k = .01 # weighting associated with the k prediction
-    rho_x = 100
-    rho_v = 100
-    rho_a = .1 # weighting associated with the acceleration prediction
-    rho_p = 1 # weighting associated with physics residual
+    # rho_k = .01                 # weighting associated with the k prediction
+    # rho_x = 100
+    # rho_v = 100
+    # rho_a = .1                  # weighting associated with the acceleration prediction
+    # rho_p = 1                   # weighting associated with physics residual
+    
+    # training parameters
+    rho_k = 1/np.std(k)**2      # weighting associated with the k prediction
+    rho_x = 1/np.std(x)**2
+    rho_v = 1/np.std(v)**2
+    rho_a = 1/np.std(a)**2      # weighting associated with the acceleration prediction
+    rho_p = 1                   # weighting associated with physics residual
+    
+    
     epochs = 100
     batch_size = 32
     
@@ -113,7 +131,7 @@ def main():
     opt = keras.optimizers.Adam(
         learning_rate = 0.001,
         beta_1 = 0.9,
-        beta_2 = 0.999
+        beta_2 = 0.995
     )
     
     model.compile(
@@ -218,7 +236,7 @@ def main():
     
     pred_out  = model.predict(dataset_generator)
     np.save('./model_predictions/pinn/pred_out.npy', pred_out)
-    #%%
+    
 
 if __name__ == '__main__':
     main()
