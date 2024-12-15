@@ -88,11 +88,13 @@ m = 1
 c = 0.2
 
 i = 1
-x = x[:-i]
+# x = x[:-i]
+x = x[i:]
 v = v[i:]
 a = a[i:]
 k = k[i:]
-F = F[:-i]
+# F = F[:-i]
+F = F[i:]
 
 residual = F - m*a - c*v - k*x
 
