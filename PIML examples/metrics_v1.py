@@ -116,7 +116,7 @@ test_data = test_data[:,::20]
 t = test_data[0,1:]
 x = test_data[1,1:]
 k = test_data[5,1:]
-pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
+pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
 x_pinn = pinn_pred[:,0]
 
 plt.figure()
@@ -183,7 +183,7 @@ test_data = test_data[:,::20]
 t = test_data[0,1:]
 x = test_data[1,1:]
 k = test_data[5,1:]
-pinn_pred = np.load('./model_predictions/pinn/v2/pred_out.npy')
+pinn_pred = np.load('./model_predictions/pinn/pred_out.npy')
 x_pinn = pinn_pred[:,0]
 
 k_pinn = pinn_pred[:,1]
