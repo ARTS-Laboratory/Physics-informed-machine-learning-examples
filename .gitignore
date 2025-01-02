@@ -6,3 +6,4 @@ PIML examples/data/no_friction.npy
 PIML examples/data/with_friction.npy
 *.npz
 
+
