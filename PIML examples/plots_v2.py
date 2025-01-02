@@ -42,6 +42,7 @@ v = all_data[:,:,2]
 a = all_data[:,:,3]
 k = all_data[:,:,4]
 F = all_data[:,:,5]
+
 #%% plot of all k paths overlapped
 plt.figure(figsize=(4,2.5))
 plt.plot(t, k.T, linewidth=0.7)
