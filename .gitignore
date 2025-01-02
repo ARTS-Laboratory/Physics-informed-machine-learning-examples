@@ -5,5 +5,5 @@ PIML examples/model_predictions/pure_physics/k_pred.npy
 PIML examples/data/no_friction.npy
 PIML examples/data/with_friction.npy
 *.npz
-
+*.slxc
 
