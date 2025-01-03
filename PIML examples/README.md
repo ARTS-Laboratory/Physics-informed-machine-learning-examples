@@ -5,7 +5,7 @@
     * Code runs and will train epochs
 1. [pinn_v3](pinn_v3.py)
     * Code will train epochs
-1. [plots_v2](plots_v2.py)
+1. [plots_results](plots_results.py)
     * Code runs and generates plots
 1. [pure_nn_v1](pure_nn_v1.py)
     * Will train epochs
