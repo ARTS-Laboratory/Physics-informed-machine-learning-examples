@@ -4,6 +4,7 @@ from tensorflow import keras
 from tensorflow.keras.layers import Layer
 from tensorflow.keras.layers import RNN, TimeDistributed, Dense, Rescaling
 from numpy.lib.stride_tricks import sliding_window_view
+
 """
 ML model with physics-integrated components does indirect measurement of k
 to solve inverse problem.

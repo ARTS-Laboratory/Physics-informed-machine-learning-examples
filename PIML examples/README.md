@@ -5,11 +5,11 @@
     * Code runs and will train epochs
 1. [pinn_v3](pinn_v3.py)
     * Code will train epochs
-1. [plots_results](plots_results.py)
+1. [plot_results](plot_results.py)
     * Code runs and generates plots
-1. [pure_nn_v1](pure_nn_v1.py)
+1. [train_pure_nn](train_pure_nn.py)
     * Will train epochs
-1. [pure_physics_v2.py](pure_physics_v2.py)
+1. [solve_pure_physics.py](solve_pure_physics.py)
     * Runs and starts running tests.
 1. [test_delta.py](test_delta.py)
     * Code starts and runs
