@@ -118,7 +118,7 @@ def main():
     
     # Step 2
     # load data
-    with_friction_data = np.load('./data/v4/with_friction.npy')
+    with_friction_data = np.load('./data/with_friction.npz')['data']
     # downsample by a factor of 20 so that sampling rate it 50 S/s
     with_friction_data = with_friction_data[:,:-1:20,:]
     

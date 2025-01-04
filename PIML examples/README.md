@@ -34,7 +34,7 @@
     * Will start training epochs
 1. [indirect_no_friction_v1.py](indirect_no_friction_v1.py)
     * Code runs and starts training epochs"
-1. [indirect_v4.py](indirect_v4.py)
+1. [test_indirect.py](test_indirect.py)
     * Code starts running and training epochs
 1. [informed_structure_v1.py](informed_structure_v1.py)
     * Code starts to train epochs.
