@@ -1,9 +1,9 @@
 # PIML Example
 
 ## Codes
-1. [pinn_control_v1](pinn_control_v1.py)
+1. [train_pinn_control](train_pinn_control.py)
     * Code runs and will train epochs
-1. [pinn_v3](pinn_v3.py)
+1. [train_pinn](train_pinn.py)
     * Code will train epochs
 1. [plot_results](plot_results.py)
     * Code runs and generates plots
@@ -28,7 +28,7 @@
     * A workaround for the error was found  
     [here](https://stackoverflow.com/questions/53014306/error-15-initializing-libiomp5-dylib-but-found-libiomp5-dylib-already-initial)
     and the I added a break statment before the last iteration of the for loop.
-1. [delta_learning_control_v1.py](delta_learning_control_v1.py)
+1. [train_delta_learning_control.py](train_delta_learning_control.py)
     * Will start training epochs
 1. [delta_learning_v1.py](delta_learning_v1.py)
     * Will start training epochs
@@ -36,7 +36,7 @@
     * Code runs and starts training epochs"
 1. [test_indirect.py](test_indirect.py)
     * Code starts running and training epochs
-1. [informed_structure_v1.py](informed_structure_v1.py)
+1. [train_informed_structure.py](train_informed_structure.py)
     * Code starts to train epochs.
     * Code did not run" OSError: Cannot parse keras metadata at path ./model_saves/pure_nn\keras_metadata.pb: Received error: Field number 0 is illegal."
     * Per Nile in email, "This seems like a tensorflow version error. I was using tensorflow 2.13.0, it's probably easiest to retrain the pure NN in your environment. Either way, the lines that cause this error (119-124) are completely non-essential and can be commented out if you want."
