@@ -11,7 +11,6 @@
 1. [solve_pure_physics.py](solve_pure_physics.py)
 1. [test_delta.py](test_delta.py)
 1. [test_indirect.py](test_indirect.py)
-1. [test_indirect.py](test_indirect.py)
 1. [analyze_pinn.py](analyze_pinn.py)
 1. [metrics_v1.py](metrics_v1.py)
 
