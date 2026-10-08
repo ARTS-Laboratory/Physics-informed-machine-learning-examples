@@ -1,5 +1,9 @@
 # Physics-Informed Machine Learning Examples
+Working Repo for a journal tutorial paper on PIML 
+
 Tutorial code demonstrating a variety of PIML methods. 
+
+
 
 Comparison methods:
 1. Pure physics
