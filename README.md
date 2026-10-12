@@ -28,13 +28,13 @@ The files are:
 
 
 ## Version control
-Tensorflow 2.10.0 (Nile) and 2.13.0 (Austin) was used to develop this code.
+Tensorflow 2.10.0 (Nile) and 2.13.0 (Austin) were used to develop this code.
 
 ##  Related Publications
 Building on the following conference papers:
 1.  Eleonora Maria Tronci, Austin R.J. Downey, Azin Mehrjoo, Puja Chowdhury, and Daniel Coble. Physics-informed machine learning part I: Different strategies to incorporate physics into engineering problems. In Conference Proceedings of the Society for Experimental Mechanics Series. Springer Nature Switzerland, 2024. doi:10.1007/978-3-031-68142-4_1 
 1.  Austin R.J. Downey, Eleonora Maria Tronci, Puja Chowdhury, and Daniel Coble. Physics-informed machine learning part II: Applications in structural response forecasting. In Conference Proceedings of the Society for Experimental Mechanics Series. Springer Nature Switzerland, 2024. doi:10.1007/978-3-031-68142-4_8
-1.  Mohsen Gol Zardian, Austin R. J. Downey, Eleonora Maria Tronci, Conor Madden, Daniel Coble, Sina Navidi, and Chao Hu. Physics-informed machine learning part III: Hard-constraint ODE method for structural dynamics. In Proceedings of the Society for Experimental Mechanics (SEM) IMAC Conference, 2026 
-1.  Eleonora Maria Tronci, Austin R. J. Downey, Connor Madden, Mohsen Gol Zardian, and Daniel Coble. Physics-informed machine learning part IV: Weight-tuned soft-constraint method for structural dynamics. In Proceedings of the Society for Experimental Mechanics (SEM) IMAC Conference, 2026
+1.  Mohsen Gol Zardian, Austin R.J. Downey, Eleonora Maria Tronci, Conor Madden, Daniel Coble, Sina Navidi, and Chao Hu. Physics-informed machine learning part III: Hard-constraint ODE method for structural dynamics. In Data Science in Engineering, 2026, Vol. 9, IMAC XLIV, pages 49-60. River Publishers, 2026. doi:10.13052/rp-9788743814207a06
+1.  Eleonora Maria Tronci, Austin R. J. Downey, Connor Madden, Mohsen Gol Zardian, and Daniel Coble. Physics-informed machine learning part IV: Weight-tuned soft-constraint method for structural dynamics. In Data Science in Engineering, 2026, Vol. 9, IMAC XLIV, pages 69-80. River Publishers, 2026. doi:10.13052/rp-9788743814207a08
 
 
